@@ -288,10 +288,11 @@ class LoginModel
             $item_lastTracked = $row->item_lastTracked;
             if($row->item_picture!=NULL){
                 $destination_path = getcwd().DIRECTORY_SEPARATOR;
-                $target_path = $destination_path . IMAGE_PATH . $row->item_picture;
-                $type = pathinfo($target_path, PATHINFO_EXTENSION);
-                $data = file_get_contents($target_path);
-                $item_picture = base64_encode($data);
+                $target_path = URL . IMAGE_PATH . $row->item_picture;
+                //$target_path = $destination_path . IMAGE_PATH . $row->item_picture;
+                //$type = pathinfo($target_path, PATHINFO_EXTENSION);
+                //$data = file_get_contents($target_path);
+                $item_picture = $target_path;//base64_encode($data);
             }
             $item_isLost = $row->item_isLost;
             $item_eLeashOn = $row->item_eLeashOn;

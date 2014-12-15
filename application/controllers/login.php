@@ -59,7 +59,9 @@ class Login extends Controller
             // if NO, then move user to login/index (login form) again
             //echo
             //header('location: ' . URL . 'login/index');
-            echo '{"success":0,"error_message":"'.$_SESSION["feedback_negative"][0].'"}';
+            $arr = array();
+            $arr[] = array('success' => 0, 'error_message' => $_SESSION["feedback_negative"][0]);
+            echo json_encode($arr);
         }
         Session::set('feedback_positive', null);
         Session::set('feedback_negative', null);
