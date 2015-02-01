@@ -371,7 +371,7 @@ class LoginModel
 
             //Gets the number of user items that the user is currently tracking
             $count =  $sth->rowCount();
-            $sql=""
+            $sql="";
 
             if($count==0){
                 // write new users data into database
