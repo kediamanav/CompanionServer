@@ -381,7 +381,7 @@ class LoginModel
             }else{
                 // modify existing item database
                 $sql = "UPDATE items SET user_name=:user_name, item_name=:item_name, item_description=:item_description, item_DOB=:item_DOB,  item_lastTracked=:item_lastTracked, item_picture=:item_picture, item_isLost= :item_isLost, item_eLeashOn=:item_eLeashOn, item_eLeashRange=:item_eLeashRange, item_macAddress=:item_macAddress
-                        WHERE user_name = :user_name and item_name = :item_name";
+                        WHERE user_name = :user_name1 and item_name = :item_name1";
             
             }   
             $query = $this->db->prepare($sql);
@@ -394,7 +394,9 @@ class LoginModel
                                   ':item_isLost' => $item_isLost,
                                   ':item_eLeashRange' => $item_eLeashRange,
                                   ':item_eLeashOn' => $item_eLeashOn,
-                                  ':item_macAddress' => $item_macAddress));
+                                  ':item_macAddress' => $item_macAddress,
+                                  ':user_name1' => $user_name,
+                                  ':item_name1' => $item_name));
             $count =  $query->rowCount();
             if ($count != 1) {
                 $_SESSION["feedback_negative"][] = FEEDBACK_ITEM_CREATION_FAILED;
@@ -519,7 +521,7 @@ class LoginModel
             }else{
                 // modify existing beacon database
                 $sql = "UPDATE beacon SET user_name=:user_name, item_name=:item_name, uuid=:uuid, major=:major,  minor=:minor, event=:event, action= :action, message=:message
-                        WHERE user_name = :user_name and item_name = :item_name";
+                        WHERE user_name = :user_name1 and item_name = :item_name1";
             }
             $query = $this->db->prepare($sql);
             $query->execute(array(':user_name' => $user_name,
@@ -529,7 +531,10 @@ class LoginModel
                                   ':major' => $beacon_minor,
                                   ':event' => $beacon_event,
                                   ':action' => $beacon_action,
-                                  ':message' => $beacon_message));
+                                  ':message' => $beacon_message,
+                                  ':user_name1' => $user_name,
+                                  ':item_name1' => $item_name,
+                                  ));
             $count =  $query->rowCount();
             if ($count != 1) {
                 $_SESSION["feedback_negative"][] = FEEDBACK_ITEM_CREATION_FAILED;
