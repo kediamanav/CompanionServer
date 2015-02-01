@@ -431,9 +431,9 @@ class LoginModel
                                           action,
                                           message
                                    FROM   beacon
-                                   WHERE  user_name = :user_name and item_name = :item_name");
+                                   WHERE  user_name = :user_name");
         //Execute the call to the database
-        $sth->execute(array(':user_name' => $_POST['user_name'],':item_name' => $_POST['item_name']));
+        $sth->execute(array(':user_name' => $_POST['user_name']));
 
         //Gets the number of user beacons that the user is currently tracking
         $count =  $sth->rowCount();
@@ -478,10 +478,6 @@ class LoginModel
             $_SESSION["feedback_negative"][] = FEEDBACK_ITEM_NAME_FIELD_EMPTY;
         } elseif (empty($_POST['uuid'])) {
             $_SESSION["feedback_negative"][] = FEEDBACK_BEACON_UUID_FIELD_EMPTY;
-        } elseif (empty($_POST['major'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_BEACON_MAJOR_FIELD_EMPTY;
-        } elseif (empty($_POST['minor'])) {
-            $_SESSION["feedback_negative"][] = FEEDBACK_BEACON_MINOR_FIELD_EMPTY;
         } elseif (!empty($_POST['user_name'])
             AND strlen($_POST['item_name']) <= 64
             AND strlen($_POST['item_name']) >= 2
