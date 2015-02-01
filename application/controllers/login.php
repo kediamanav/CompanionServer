@@ -162,6 +162,47 @@ class Login extends Controller
         Session::set('feedback_negative', null);
     }
 
+    /***
+    *   Get beacon data from the server 
+    */
+    function getUserBeacons()
+    {
+        // run the getUserBeacons() method in the login-model, put the result in $item_successful (true or false)
+        $login_model = $this->loadModel('Login');
+        // perform the getUserBeacons method, put result (true or false) into $item_successful
+        $item_successful = $login_model->getUserBeacons();
+
+        // item retrival failed
+        if (!$item_successful) {
+            echo '{"success":0,"error_message":"'.$_SESSION["feedback_negative"][0].'"}';
+        } else {
+            //item retrival was successful
+            echo json_encode($item_successful);
+        }
+        Session::set('feedback_positive', null);
+        Session::set('feedback_negative', null);
+    }
+
+    /***
+    *   This function adds a new beacon to the list of existing user beacons
+    */
+    function addUserBeacon(){
+        // run the addUserBeacon()) method in the login-model, put the result in $item_successful (true or false)
+        $login_model = $this->loadModel('Login');
+        // perform the addUserBeacon method, put result (true or false) into $item_successful
+        $item_successful = $login_model->addUserBeacon();
+
+        // item retrival failed
+        if (!$item_successful) {
+            echo '{"success":0,"error_message":"'.$_SESSION["feedback_negative"][0].'"}';
+        } else {
+            //item was successful added
+            echo '{"success":1}';
+        }
+        Session::set('feedback_positive', null);
+        Session::set('feedback_negative', null);
+    }
+
 
     /**
      * Show user's profile

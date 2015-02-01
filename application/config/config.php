@@ -279,3 +279,6 @@ define("FEEDBACK_ITEM_MAC_ADDRESS_FIELD_EMPTY", "The item does not have a MAC ad
 define("FEEDBACK_ITEM_DOB_FIELD_EMPTY", "The item's creation time could not be successfully retrived");
 define("FEEDBACK_ITEM_CREATION_FAILED", "The item could not be added to the server");
 define("FEEDBACK_IMAGE_UPLOAD_FAILED", "There was an error uploading the image to the server");
+define("FEEDBACK_BEACON_UUID_FIELD_EMPTY", "The beacon uuid field is empty");
+define("FEEDBACK_BEACON_MAJOR_FIELD_EMPTY", "The beacon major field is empty");
+define("FEEDBACK_BEACON_MINOR_FIELD_EMPTY", "The beacon minor field is empty");

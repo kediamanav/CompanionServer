@@ -352,9 +352,38 @@ class LoginModel
                 }
             }
 
-            // write new users data into database
-            $sql = "INSERT INTO items (user_name, item_name, item_description, item_DOB, item_lastTracked, item_picture, item_isLost, item_eLeashOn, item_eLeashRange, item_macAddress)
-                    VALUES (:user_name, :item_name, :item_description, :item_DOB, :item_lastTracked, :item_picture, :item_isLost, :item_eLeashOn, :item_eLeashRange, :item_macAddress)";
+            // get user's item data
+            $sth = $this->db->prepare("SELECT item_id,
+                                              item_name,
+                                              item_description,
+                                              item_DOB,
+                                              item_lastTracked,
+                                              item_picture,
+                                              item_isLost,
+                                              item_eLeashOn,
+                                              item_eLeashType,
+                                              item_eLeashRange,
+                                              item_macAddress
+                                       FROM   items
+                                       WHERE  user_name = :user_name");
+            //Execute the call to the database
+            $sth->execute(array(':user_name' => $_POST['user_name']));
+
+            //Gets the number of user items that the user is currently tracking
+            $count =  $sth->rowCount();
+            $sql=""
+
+            if($count==0){
+                // write new users data into database
+                $sql = "INSERT INTO items (user_name, item_name, item_description, item_DOB, item_lastTracked, item_picture, item_isLost, item_eLeashOn, item_eLeashRange, item_macAddress)
+                        VALUES (:user_name, :item_name, :item_description, :item_DOB, :item_lastTracked, :item_picture, :item_isLost, :item_eLeashOn, :item_eLeashRange, :item_macAddress)";
+            
+            }else{
+                // modify existing item database
+                $sql = "UPDATE items SET user_name=:user_name, item_name=:item_name, item_description=:item_description, item_DOB=:item_DOB,  item_lastTracked=:item_lastTracked, item_picture=:item_picture, item_isLost= :item_isLost, item_eLeashOn=:item_eLeashOn, item_eLeashRange=:item_eLeashRange, item_macAddress=:item_macAddress
+                        WHERE user_name = :user_name and item_name = :item_name";
+            
+            }   
             $query = $this->db->prepare($sql);
             $query->execute(array(':user_name' => $user_name,
                                   ':item_name' => $item_name,
@@ -379,6 +408,146 @@ class LoginModel
         // default return, returns only true of really successful (see above)
         return false;
     }
+
+
+    /*
+        This function returns the list of tracking beacons the user has
+    */
+    public function getUserBeacons(){
+        // we do negative-first checks here
+        //If the user is not logged in, it should throw an error
+        if (!isset($_POST['user_name'])) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_USER_NOT_LOGGEDIN;
+            return false;
+        }
+
+        // get user's item data
+        $sth = $this->db->prepare("SELECT user_name,
+                                          item_name,
+                                          uuid,
+                                          major,
+                                          minor,
+                                          event,
+                                          action,
+                                          message
+                                   FROM   beacon
+                                   WHERE  user_name = :user_name and item_name = :item_name");
+        //Execute the call to the database
+        $sth->execute(array(':user_name' => $_POST['user_name'],':item_name' => $_POST['item_name']));
+
+        //Gets the number of user beacons that the user is currently tracking
+        $count =  $sth->rowCount();
+
+        $arr = array();
+        $user_name = NULL;
+        $item_name = NULL;
+        $beacon_uuid = NULL;
+        $beacon_major = NULL;
+        $beacon_minor = NULL;
+        $beacon_event = NULL;
+        $beacon_action = NULL;
+        $beacon_messgae = NULL;
+        //var_dump($sth->fetch());
+
+        while ($row=$sth->fetch())
+        {
+            $user_name = $row->user_name;
+            $item_name = $row->item_name;
+            $beacon_uuid = $row->uuid;
+            $beacon_major = $row->major;
+            $beacon_minor = $row->minor;
+            $beacon_event = $row->event;
+            $beacon_action = $row->action;
+            $beacon_messgae = $row->message;
+
+            $arr[] = array('user_name' => $user_name, 'item_name' => $item_name, 'uuid' => $beacon_uuid, 'major' => $beacon_major, 'minor' => $beacon_minor, 'event' => $beacon_event, 'action' => $beacon_action, 'message' => $beacon_messgae);
+        }
+        return $arr;
+    }
+
+
+    /**
+    *   This function adds/modifies a beacon to the list of exising user beacons
+    *
+    */
+    public function addUserBeacon(){
+
+        if (empty($_POST['user_name'])) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_USER_NOT_LOGGEDIN;
+        } elseif (empty($_POST['item_name'])) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_ITEM_NAME_FIELD_EMPTY;
+        } elseif (empty($_POST['uuid'])) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_BEACON_UUID_FIELD_EMPTY;
+        } elseif (empty($_POST['major'])) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_BEACON_MAJOR_FIELD_EMPTY;
+        } elseif (empty($_POST['minor'])) {
+            $_SESSION["feedback_negative"][] = FEEDBACK_BEACON_MINOR_FIELD_EMPTY;
+        } elseif (!empty($_POST['user_name'])
+            AND strlen($_POST['item_name']) <= 64
+            AND strlen($_POST['item_name']) >= 2
+            AND preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
+            AND !empty($_POST['item_name'])) {
+
+            // clean the input
+            $user_name = strip_tags($_POST['user_name']);
+            $item_name = strip_tags($_POST['item_name']);
+            $beacon_uuid = strip_tags($_POST['uuid']);
+            $beacon_major = $_POST['major'];
+            $beacon_minor = $_POST['minor'];
+            $beacon_event = $_POST['event'];
+            $beacon_action = $_POST['action'];
+            $beacon_message = $_POST['message'];
+
+            // get user's item data
+            $sth = $this->db->prepare("SELECT user_name,
+                                              item_name,
+                                              uuid,
+                                              major,
+                                              minor,
+                                              event,
+                                              action,
+                                              message
+                                       FROM   beacon
+                                       WHERE  user_name = :user_name and item_name = :item_name");
+            //Execute the call to the database
+            $sth->execute(array(':user_name' => $_POST['user_name'],':item_name' => $_POST['item_name']));
+
+            //Gets the number of user beacons that the user is currently tracking
+            $count =  $sth->rowCount();
+            $sql="";
+
+            if ($count==0){
+                // write new users data into database
+                $sql = "INSERT INTO beacon (user_name, item_name, uuid, major, minor, event, action, message)
+                        VALUES (:user_name, :item_name, :uuid, :major, :major, :event, :action, :message)";
+            }else{
+                // modify existing beacon database
+                $sql = "UPDATE beacon SET user_name=:user_name, item_name=:item_name, uuid=:uuid, major=:major,  minor=:minor, event=:event, action= :action, message=:message
+                        WHERE user_name = :user_name and item_name = :item_name";
+            }
+            $query = $this->db->prepare($sql);
+            $query->execute(array(':user_name' => $user_name,
+                                  ':item_name' => $item_name,
+                                  ':uuid' => $beacon_uuid,
+                                  ':major' => $beacon_major,
+                                  ':major' => $beacon_minor,
+                                  ':event' => $beacon_event,
+                                  ':action' => $beacon_action,
+                                  ':message' => $beacon_message));
+            $count =  $query->rowCount();
+            if ($count != 1) {
+                $_SESSION["feedback_negative"][] = FEEDBACK_ITEM_CREATION_FAILED;
+                return false;
+            }
+            return true;
+
+        } else {
+            $_SESSION["feedback_negative"][] = FEEDBACK_UNKNOWN_ERROR;
+        }
+        // default return, returns only true of really successful (see above)
+        return false;
+    }
+
 
 
     /**
