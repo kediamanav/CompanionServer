@@ -152,7 +152,8 @@ define("PHPMAILER_DEBUG_MODE", 0);
 // use SMTP or basic mail() ? SMTP is strongly recommended
 define("EMAIL_USE_SMTP", true);
 // name of your host
-define("EMAIL_SMTP_HOST", 'smtpcorp.com');
+define("EMAIL_SMTP_HOST", 'smtp.locus-trak.com');
+//define("EMAIL_SMTP_HOST", 'smtpcorp.com');
 //define("EMAIL_SMTP_HOST", 'ssl://smtp.gmail.com');
 
 //For debuggin smtp, 1: for errors and messages and 2 for only messages
@@ -160,7 +161,8 @@ define("EMAIL_SMTP_DEBUG", 0);
 // leave this true until your SMTP can be used without login
 define("EMAIL_SMTP_AUTH", true);
 // SMTP provider username
-define("EMAIL_SMTP_USERNAME", 'manavkedia1993@gmail.com');
+define("EMAIL_SMTP_USERNAME", 'manav.kedia@locus-trak.com');
+//define("EMAIL_SMTP_USERNAME", 'manavkedia1993@gmail.com');
 // SMTP provider password
 define("EMAIL_SMTP_PASSWORD", 'Manav.123');
 // SMTP provider port
@@ -168,7 +170,6 @@ define("EMAIL_SMTP_PORT", 465);
 //define("EMAIL_SMTP_PORT", 465);
 // SMTP encryption, usually SMTP providers use "tls" or "ssl", for details see the PHPMailer manual
 define("EMAIL_SMTP_ENCRYPTION", 'ssl');
-
 /**
  * Configuration for: Email content data
  *
