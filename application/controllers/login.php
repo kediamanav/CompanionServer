@@ -163,6 +163,27 @@ class Login extends Controller
     }
 
     /***
+    *   This function removes an item from the list of existing user item
+    */
+    function deleteUserItem(){
+        // run the deleteUserItem()) method in the login-model, put the result in $item_successful (true or false)
+        $login_model = $this->loadModel('Login');
+        // perform the deleteUserItem method, put result (true or false) into $item_successful
+        $item_successful = $login_model->deleteUserItem();
+
+        // item deletion failed
+        if (!$item_successful) {
+            echo '{"success":0,"error_message":"'.$_SESSION["feedback_negative"][0].'"}';
+        } else {
+            //item was successful deleted
+            echo '{"success":1}';
+        }
+        Session::set('feedback_positive', null);
+        Session::set('feedback_negative', null);
+    }
+
+
+    /***
     *   Get beacon data from the server 
     */
     function getUserBeacons()
@@ -197,6 +218,26 @@ class Login extends Controller
             echo '{"success":0,"error_message":"'.$_SESSION["feedback_negative"][0].'"}';
         } else {
             //item was successful added
+            echo '{"success":1}';
+        }
+        Session::set('feedback_positive', null);
+        Session::set('feedback_negative', null);
+    }
+
+    /***
+    *   This function removes a beacon from the list of existing user beacons
+    */
+    function deleteUserBeacon(){
+        // run the deleteUserBeacon()) method in the login-model, put the result in $item_successful (true or false)
+        $login_model = $this->loadModel('Login');
+        // perform the deleteUserBeacon method, put result (true or false) into $item_successful
+        $item_successful = $login_model->deleteUserBeacon();
+
+        // beacon deletion failed
+        if (!$item_successful) {
+            echo '{"success":0,"error_message":"'.$_SESSION["feedback_negative"][0].'"}';
+        } else {
+            //beacon was successful deleted
             echo '{"success":1}';
         }
         Session::set('feedback_positive', null);

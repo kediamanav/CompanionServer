@@ -20,7 +20,7 @@ ini_set("display_errors", 1);
  * if you are using a (different) port, then put this in here, like http://mydomain:8888/subfolder/
  * Note: The trailing slash is important!
  */
-define('URL', 'http://localhost/~kediamanav/');
+define('URL', 'http://locus-trak.rhcloud.com/');
 
 /**
  * Configuration for: Folders
@@ -73,7 +73,7 @@ define('AVATAR_DEFAULT_IMAGE', 'default.jpg');
 define('COOKIE_RUNTIME', 1209600);
 // the domain where the cookie is valid for, for local development ".127.0.0.1" and ".localhost" will work
 // IMPORTANT: always put a dot in front of the domain, like ".mydomain.com" !
-define('COOKIE_DOMAIN', '.localhost/~kediamanav');
+define('COOKIE_DOMAIN', '.locus-trak.rhcloud.com');
 
 /**
  * Configuration for: Database
@@ -92,10 +92,10 @@ define('COOKIE_DOMAIN', '.localhost/~kediamanav');
  * define('DB_PASS', 'xxx');
  */
 define('DB_TYPE', 'mysql');
-define('DB_HOST', '127.0.0.1');
+define('DB_HOST', '127.5.7.130:3306');
 define('DB_NAME', 'login');
-define('DB_USER', 'root');
-define('DB_PASS', 'change');
+define('DB_USER', 'adminrDxcDpg');
+define('DB_PASS', 'FI8N5_J_UB1u');
 
 /**
  * Configuration for: Hashing strength
@@ -170,6 +170,7 @@ define("EMAIL_SMTP_PORT", 465);
 //define("EMAIL_SMTP_PORT", 465);
 // SMTP encryption, usually SMTP providers use "tls" or "ssl", for details see the PHPMailer manual
 define("EMAIL_SMTP_ENCRYPTION", 'ssl');
+
 /**
  * Configuration for: Email content data
  *
@@ -283,3 +284,5 @@ define("FEEDBACK_IMAGE_UPLOAD_FAILED", "There was an error uploading the image t
 define("FEEDBACK_BEACON_UUID_FIELD_EMPTY", "The beacon uuid field is empty");
 define("FEEDBACK_BEACON_MAJOR_FIELD_EMPTY", "The beacon major field is empty");
 define("FEEDBACK_BEACON_MINOR_FIELD_EMPTY", "The beacon minor field is empty");
+define("FEEDBACK_BEACON_DELETION_FAILED","The beacon could not be deleted");
+define("FEEDBACK_ITEM_DELETION_FAILED","The item could not be deleted");
