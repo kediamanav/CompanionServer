@@ -579,7 +579,7 @@ class LoginModel
                                   ':action' => $beacon_action,
                                   ':message' => $beacon_message,
                                   ':user_name1' => $user_name,
-                                  ':item_name1' => $item_name,
+                                  ':item_name1' => $item_name
                                   ));
             $count =  $query->rowCount();
             if ($count != 1) {
