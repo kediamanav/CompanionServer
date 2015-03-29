@@ -599,19 +599,18 @@ class LoginModel
             }else{
                 // modify existing beacon database
                 $sql = "UPDATE beacon SET user_name=:user_name, item_name=:item_new_name, uuid=:uuid, major=:major,  minor=:minor, event=:event, action= :action, message=:message
-                        WHERE user_name = :user_name1 and item_name = :item_name";
+                        WHERE user_name = :user_name1 AND item_name = :item_name";
                 $query = $this->db->prepare($sql);
                 $query->execute(array(':user_name' => $user_name,
                                       ':item_new_name' => $item_new_name,
                                       ':uuid' => $beacon_uuid,
                                       ':major' => $beacon_major,
-                                      ':major' => $beacon_minor,
+                                      ':minor' => $beacon_minor,
                                       ':event' => $beacon_event,
                                       ':action' => $beacon_action,
                                       ':message' => $beacon_message,
                                       ':user_name1' => $user_name,
-                                      ':item_name' => $item_name
-                                      ));
+                                      ':item_name' => $item_name));
                 $count =  $query->rowCount();
                 if ($count != 1) {
                     $_SESSION["feedback_negative"][] = FEEDBACK_ITEM_CREATION_FAILED;
